@@ -1,18 +1,44 @@
 {
-    "version": "0.2.0",
-    "configurations": [    
-      {
-        "type": "objectscript",
-        "request": "launch",
-        "name": "ObjectScript Debug Class", 
-        "program": "##class(PackageSample.ObjectScript).Test()",
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Current File",
+      "type": "python",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/src/python/flask",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Python: Flask",
+      "type": "python",
+      "request": "launch",
+      "module": "flask",
+      "cwd": "${workspaceFolder}/src/python",
+      "env": {
+        "FLASK_APP": "/irisdev/app/src/python/flask/app.py",
+        "FLASK_ENV": "development",
       },
-      {
-        "type": "objectscript",
-        "request": "attach",
-        "name": "ObjectScript Attach",
-        "processId": "${command:PickProcess}",
-        "system": true
-      }
-    ]
-  }
+      "args": [
+        "run",
+        "--no-debugger"
+      ],
+      "jinja": true,
+      "justMyCode": true
+    },
+    {
+      "type": "objectscript",
+      "request": "launch",
+      "name": "ObjectScript Debug Class",
+      "program": "##class(PackageSample.ObjectScript).Test()",
+    },
+    {
+      "type": "objectscript",
+      "request": "attach",
+      "name": "ObjectScript Attach",
+      "processId": "${command:PickProcess}",
+      "system": true
+    }
+  ]
+}
