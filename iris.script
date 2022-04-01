@@ -16,7 +16,13 @@
 
  zpm "install pex-embbeded-python" 
  
- zw ##class(Grongier.PEX.Utils).RegisterComponent("FlaskService","FlaskService","/irisdev/app/src/python/flask/|/irisdev/app/src/python/flask/interop",1,"Python.FlaskService")
- zw ##class(Grongier.PEX.Utils).RegisterComponent("CrudPerson","CrudPerson","/irisdev/app/src/python/flask/|/irisdev/app/src/python/flask/interop",1,"Python.CrudPerson")
+ zw ##class(Grongier.PEX.Utils).RegisterComponent("interop.FlaskService","FlaskService","/irisdev/app/src/python/flask/",1,"Python.FlaskService")
+ zw ##class(Grongier.PEX.Utils).RegisterComponent("interop.CrudPerson","CrudPerson","/irisdev/app/src/python/flask/",1,"Python.CrudPerson")
+
+ do $System.OBJ.LoadDir("/irisdev/app/src/ObjectScript","cubk","*.cls",1)
+
+ set ^EnsPortal.Settings("SuperUser","LastProduction")	= "Python.Production"
+
+ zw ##class(Ens.Director).SetAutoStart("Python.Production")
 
  halt
