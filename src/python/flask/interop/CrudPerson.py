@@ -10,7 +10,6 @@ from interop.obj.ClassPerson import Person
 class CrudPerson(grongier.pex.BusinessOperation):
 
     def OnMessage(self, request):
-        self.LOGINFO(request.__class__.__str__)
         if isinstance(request,CreatePersonRequest):
             return self.CreatePerson(request)
         if isinstance(request,GetAllPersonResquest):
