@@ -6,7 +6,7 @@ set -m
 
 /usr/irissys/dev/Cloud/ICM/waitISC.sh
 
-cd ${SRC_PATH}/src/python/flask
+cd ${SRC_PATH}/src/python/person
 
 ${PYTHON_PATH} -m gunicorn --bind "0.0.0.0:8080" wsgi:app &
 

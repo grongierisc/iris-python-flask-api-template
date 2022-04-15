@@ -1,13 +1,14 @@
-import grongier.pex
+from grongier.pex import BusinessOperation
 import iris
 
-from interop.msg.CreatePerson import CreatePersonResponse,CreatePersonRequest
-from interop.msg.GetPerson import GetPersonRequest,GetPersonResponse
-from interop.msg.GetAllPerson import GetAllPersonResquest,GetAllPersonResponse
+from msg import (CreatePersonResponse,CreatePersonRequest,
+                            GetPersonRequest,GetPersonResponse,
+                            GetAllPersonResquest,GetAllPersonResponse
+)
 
-from interop.obj.ClassPerson import Person
+from obj import Person
 
-class CrudPerson(grongier.pex.BusinessOperation):
+class CrudPerson(BusinessOperation):
 
     def OnMessage(self, request):
         if isinstance(request,CreatePersonRequest):

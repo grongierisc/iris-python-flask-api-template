@@ -1,15 +1,13 @@
-import grongier.pex
+from grongier.pex import BusinessService
 
-class FlaskService(grongier.pex.BusinessService):
+class FlaskService(BusinessService):
 
     def OnInit(self):
         
         if not hasattr(self,'Target'):
             self.Target = "Python.CrudPerson"
         
-        self.LastPostName = ""
-        
-        return 1
+        return 
 
     def OnProcessInput(self,request):
 

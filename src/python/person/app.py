@@ -1,9 +1,8 @@
 from flask import Flask, jsonify, request, make_response
 from grongier.pex import Director
 
-from interop.obj.ClassPerson import Person
-from interop.msg.CreatePerson import CreatePersonRequest
-from interop.msg.GetAllPerson import GetAllPersonResquest
+from interop import obj,msg
+
 
 app = Flask(__name__)
 
@@ -19,7 +18,7 @@ def getInfo():
 
 @app.route("/persons/", methods=["GET"])
 def getAllPersons():
-    msg = GetAllPersonResquest()
+    msg = msg.GetAllPersonResquest()
 
     tService = Director.CreateBusinessService("Python.FlaskService")
     response = tService.dispatchProcessInput(msg)
@@ -29,8 +28,8 @@ def getAllPersons():
 def postPerson():
     payload = {} 
 
-    person = Person(request.get_json())
-    msg = CreatePersonRequest(Person=person)
+    person = obj.Person(request.get_json())
+    msg = msg.CreatePersonRequest(Person=person)
 
     tService = Director.CreateBusinessService("Python.FlaskService")
     response = tService.OnProcessInput(msg)
