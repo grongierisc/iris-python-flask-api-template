@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from grongier.pex import Message
-from obj import Person
+from interop.obj import Person
 
 @dataclass
 class CreatePersonRequest(Message):

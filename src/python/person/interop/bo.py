@@ -3,12 +3,12 @@ import iris
 from datetime import datetime
 import uuid,decimal
 
-from msg import (CreatePersonResponse,CreatePersonRequest,
+from interop.msg import (CreatePersonResponse,CreatePersonRequest,
                             GetPersonRequest,GetPersonResponse,
                             GetAllPersonResquest,GetAllPersonResponse
 )
 
-from obj import Person
+from interop.obj import Person
 
 class CrudPerson(BusinessOperation):
 
@@ -22,7 +22,11 @@ class CrudPerson(BusinessOperation):
 
     def CreatePerson(self,request:CreatePersonRequest):
         sqlInsert = 'insert into Sample.Person values (?,?,?,?,?)'
-        iris.sql.exec(sqlInsert,request.person.company,request.person.dob,request.person.name,request.person.phone,request.person.title)
+        if request.person.dob is None:
+            dob = ''
+        else:
+            dob = request.person.dob
+        iris.sql.exec(sqlInsert,request.person.company,dob,request.person.name,request.person.phone,request.person.title)
         return CreatePersonResponse()
 
     def GetPerson(self,request:GetPersonRequest):
@@ -47,10 +51,10 @@ class CrudPerson(BusinessOperation):
         rs = iris.sql.exec(sqlSelect)
         response = GetAllPersonResponse()
         response.persons = list()
-        person = Person(nameBytes=b'name',companyUUID=uuid.uuid4(),titleDecimal=decimal.Decimal(10),phone='phone',dob=datetime.now())
-        response.persons.append(person)
-        # for person in rs:
-        #     response.persons.append(Person(person))
+        # person = Person(nameBytes=b'name',companyUUID=uuid.uuid4(),titleDecimal=decimal.Decimal(10),phone='phone',dob=datetime.now())
+        # response.persons.append(person)
+        for person in rs:
+            response.persons.append(Person(person))
         return response
 
 if __name__ == '__main__':
