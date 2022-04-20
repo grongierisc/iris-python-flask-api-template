@@ -29,11 +29,10 @@ def postPerson():
     payload = {} 
 
     person = obj.Person(request.get_json())
-    msg = msg.CreatePersonRequest(Person=person)
+    tMsg = msg.CreatePersonRequest(Person=person)
 
     tService = Director.CreateBusinessService("Python.FlaskService")
-    response = tService.OnProcessInput(msg)
-
+    response = tService.OnProcessInput(tMsg)
 
     return jsonify(payload)
 

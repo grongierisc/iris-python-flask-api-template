@@ -17,7 +17,7 @@
       "module": "flask",
       "cwd": "${workspaceFolder}/src/python",
       "env": {
-        "FLASK_APP": "/irisdev/app/src/python/flask/app.py",
+        "FLASK_APP": "/irisdev/app/src/python/person/app.py",
         "FLASK_ENV": "development",
       },
       "args": [

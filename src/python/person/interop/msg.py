@@ -1,21 +1,21 @@
 from dataclasses import dataclass
 from grongier.pex import Message
-from .obj import Person
+from obj import Person
 
 @dataclass
 class CreatePersonRequest(Message):
 
-    Person:Person = None
+    person:Person = None
 
 @dataclass
 class CreatePersonResponse(Message):
 
-    Status:int=None
+    status:int=None
 
 @dataclass
 class GetAllPersonResponse(Message):
 
-    Persons:[Person] = None
+    persons:[Person] = None
 
 @dataclass
 class GetAllPersonResquest(Message):
@@ -26,9 +26,9 @@ class GetAllPersonResquest(Message):
 @dataclass
 class GetPersonResponse(Message):
 
-    Person:Person = None
+    person:Person = None
 
 @dataclass
 class GetPersonRequest(Message):
 
-    Id:int = None
+    id:int = None
