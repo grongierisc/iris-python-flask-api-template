@@ -6,8 +6,8 @@ from decimal import Decimal
 
 @dataclass
 class Person:
-    nameBytes:bytes = None
-    titleDecimal:Decimal = None
-    companyUUID:UUID = None
+    name:str = None
+    title:str = None
+    company:str = None
     phone:str = None
     dob:datetime = None
