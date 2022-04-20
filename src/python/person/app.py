@@ -28,8 +28,8 @@ def getAllPersons():
 def postPerson():
     payload = {} 
 
-    person = obj.Person(request.get_json())
-    tMsg = msg.CreatePersonRequest(Person=person)
+    person = obj.Person(**request.get_json())
+    tMsg = msg.CreatePersonRequest(person=person)
 
     tService = Director.CreateBusinessService("Python.FlaskService")
     response = tService.OnProcessInput(tMsg)
