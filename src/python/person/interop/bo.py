@@ -12,6 +12,11 @@ from interop.obj import Person
 
 class CrudPerson(BusinessOperation):
 
+    DISPATCH  = [
+                    ('interop.msg.CreatePersonRequest','CreatePerson'),
+                    ('interop.msg.GetPersonRequest','GetPerson')
+                ]
+
     def OnMessage(self, request):
         if isinstance(request,CreatePersonRequest):
             return self.CreatePerson(request)
@@ -57,8 +62,24 @@ class CrudPerson(BusinessOperation):
             response.persons.append(Person(person))
         return response
 
+class MyOperation(BusinessOperation):
+
+    def OnMessage(self, request):
+        self.LOGINFO('toto')
+        return 
+        
+    def EnsString(self,reques:'iris.Ens.StringRequest'):
+        return iris.cls('Ens.StringResponse')._New(reques.StringValue)
+
+    def EnsPython(self,request:GetPersonRequest):
+        return iris.cls('Ens.StringResponse')._New('GetPersonRequest')
+
 if __name__ == '__main__':
-    crudPerson = CrudPerson()
-    request = GetAllPersonResquest()
-    request = 'msg.CreatePersonRequest:{"person": {"nameBytes": "bytes:bmFtZQ==", "titleDecimal": "decimal:10", "companyUUID": "uuid:d162d152-b1fe-4cd6-aadb-af861d2087a6", "phone": "phone", "dob": "datetime:2022-04-19T15:57:08.331"} }'
+    crudPerson = MyOperation()
+    crudPerson._dispatchOnInit('')
+    request = iris.cls('Ens.StringRequest')._New('toto')
     response = crudPerson._dispatchOnMessage(request)
+
+    # request = GetAllPersonResquest()
+    # request = 'msg.CreatePersonRequest:{"person": {"nameBytes": "bytes:bmFtZQ==", "titleDecimal": "decimal:10", "companyUUID": "uuid:d162d152-b1fe-4cd6-aadb-af861d2087a6", "phone": "phone", "dob": "datetime:2022-04-19T15:57:08.331"} }'
+    # response = crudPerson._dispatchOnMessage(request)
