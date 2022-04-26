@@ -1,4 +1,6 @@
 {
+  "python.languageServer" : "Pylance",
+  
     "files.associations": {
     
         "Dockerfile*": "dockerfile",

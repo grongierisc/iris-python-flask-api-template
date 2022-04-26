@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import List
 from grongier.pex import Message
 from interop.obj import Person
 
@@ -10,15 +11,15 @@ class CreatePersonRequest(Message):
 @dataclass
 class CreatePersonResponse(Message):
 
-    status:int=None
+    id:int=None
 
 @dataclass
 class GetAllPersonResponse(Message):
 
-    persons:[Person] = None
+    persons:List[Person] = None
 
 @dataclass
-class GetAllPersonResquest(Message):
+class GetAllPersonRequest(Message):
 
     currPage:int=None
     pageSize:int=None
@@ -32,3 +33,13 @@ class GetPersonResponse(Message):
 class GetPersonRequest(Message):
 
     id:int = None
+
+@dataclass
+class UpdatePersonRequest(Message):
+
+    id:int = None
+    person:Person = None
+
+@dataclass
+class UpdatePersonResponse(Message):
+    pass

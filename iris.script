@@ -13,11 +13,12 @@
  zn "USER"
 
  do ##class(%Library.EnsembleMgr).EnableNamespace("USER",1)
+ do $SYSTEM.SQL.Schema.ImportDDL("/irisdev/app/Sample.sql","/irisdev/app/sql.log","IRIS")
 
  zpm "install pex-embbeded-python" 
  
  zw ##class(Grongier.PEX.Utils).RegisterComponent("bs","FlaskService","/irisdev/app/src/python/person/interop",1,"Python.FlaskService")
- zw ##class(Grongier.PEX.Utils).RegisterComponent("bo","CrudPerson","/irisdev/app/src/python/person/interop",1,"Python.CrudPerson")
+ zw ##class(Grongier.PEX.Utils).RegisterComponent("interop.bo","CrudPerson","/irisdev/app/src/python/person/",1,"Python.CrudPerson")
 
  do $System.OBJ.LoadDir("/irisdev/app/src/ObjectScript","cubk","*.cls",1)
 

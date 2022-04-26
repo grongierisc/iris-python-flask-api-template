@@ -8,7 +8,7 @@
 
 -- Export of all Definitions for schema 'dc_Sample' --
 
-CREATE TABLE dc_Sample.Person (
+CREATE TABLE Sample.Person (
 
          Company                                  VARCHAR(50),
          DOB                                      DATE,

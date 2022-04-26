@@ -1,53 +1,75 @@
-from grongier.pex import BusinessOperation
 import iris
-from datetime import datetime
 import uuid,decimal
+from datetime import datetime
+from grongier.pex import BusinessOperation
+
 
 from interop.msg import (CreatePersonResponse,CreatePersonRequest,
                             GetPersonRequest,GetPersonResponse,
-                            GetAllPersonResquest,GetAllPersonResponse
+                            GetAllPersonResquest,GetAllPersonResponse,
+                            UpdatePersonRequest,UpdatePersonResponse
 )
 
 from interop.obj import Person
 
 class CrudPerson(BusinessOperation):
 
+    # It's can be dynamic, but here for demo purpose it's hard coded
     DISPATCH  = [
                     ('interop.msg.CreatePersonRequest','CreatePerson'),
-                    ('interop.msg.GetPersonRequest','GetPerson')
+                    ('interop.msg.GetAllPersonRequest','GetAllPerson'),
+                    ('interop.msg.GetPersonRequest','GetPerson'),
+                    ('interop.msg.UpdatePersonRequest','UpdatePerson'),
                 ]
 
     def OnMessage(self, request):
-        if isinstance(request,CreatePersonRequest):
-            return self.CreatePerson(request)
-        if isinstance(request,GetAllPersonResquest):
-            return self.GetAllPerson(request)
-
         return 
 
     def CreatePerson(self,request:CreatePersonRequest):
-        sqlInsert = 'insert into Sample.Person values (?,?,?,?,?)'
-        if request.person.dob is None:
-            dob = ''
-        else:
-            dob = request.person.dob
-        iris.sql.exec(sqlInsert,request.person.company,dob,request.person.name,request.person.phone,request.person.title)
-        return CreatePersonResponse()
+
+        # sqlInsert = 'insert into Sample.Person values (?,?,?,?,?)'
+        # iris.sql.exec(sqlInsert,request.person.company,dob,request.person.name,request.person.phone,request.person.title)
+        
+        # IRIS ORM
+        person = iris.cls('Sample.Person')._New()
+        if (v:=request.person.company) is not None: person.Company = v 
+        if (v:=request.person.name) is not None: person.Name = v 
+        if (v:=request.person.phone) is not None: person.Phone = v 
+        if (v:=request.person.title) is not None: person.Title = v 
+        if (v:=request.person.dob) is not None: person.DOB = v 
+
+        person._Save()
+        
+        return CreatePersonResponse(person._Id())
+
+    def UpdatePerson(self,request:UpdatePersonRequest):
+
+        # IRIS ORM
+        if iris.cls('Sample.Person')._ExistsId(request.id):
+            person = iris.cls('Sample.Person')._OpenId(request.id)
+            if (v:=request.person.company) is not None: person.Company = v 
+            if (v:=request.person.name) is not None: person.Name = v 
+            if (v:=request.person.phone) is not None: person.Phone = v 
+            if (v:=request.person.title) is not None: person.Title = v 
+            if (v:=request.person.dob) is not None: person.DOB = v 
+            person._Save()
+        
+        return UpdatePersonResponse()
 
     def GetPerson(self,request:GetPersonRequest):
         sqlSelect = """
             SELECT 
                 Company, DOB, Name, Phone, Title
             FROM Sample.Person
-            where ID = ?"""
+            where ID = ?
+            """
         rs = iris.sql.exec(sqlSelect,request.id)
         response = GetPersonResponse()
-        #response.person = Person(name='name',company='company',title='title',phone='phone',dob=datetime.now())
         for person in rs:
-            response.person= Person(person)
+            response.person= Person(person[0],person[1],person[2],person[3],person[4])
         return response
 
-    def GetAllPerson(self,request:GetPersonRequest):
+    def GetAllPerson(self,request:GetAllPersonRequest):
         sqlSelect = """
             SELECT 
                 Company, DOB, Name, Phone, Title
@@ -56,30 +78,10 @@ class CrudPerson(BusinessOperation):
         rs = iris.sql.exec(sqlSelect)
         response = GetAllPersonResponse()
         response.persons = list()
-        # person = Person(nameBytes=b'name',companyUUID=uuid.uuid4(),titleDecimal=decimal.Decimal(10),phone='phone',dob=datetime.now())
-        # response.persons.append(person)
         for person in rs:
-            response.persons.append(Person(person))
+            response.persons.append(Person(person[0],person[1],person[2],person[3],person[4]))
         return response
 
-class MyOperation(BusinessOperation):
-
-    def OnMessage(self, request):
-        self.LOGINFO('toto')
-        return 
-        
-    def EnsString(self,reques:'iris.Ens.StringRequest'):
-        return iris.cls('Ens.StringResponse')._New(reques.StringValue)
-
-    def EnsPython(self,request:GetPersonRequest):
-        return iris.cls('Ens.StringResponse')._New('GetPersonRequest')
 
 if __name__ == '__main__':
-    crudPerson = MyOperation()
-    crudPerson._dispatchOnInit('')
-    request = iris.cls('Ens.StringRequest')._New('toto')
-    response = crudPerson._dispatchOnMessage(request)
-
-    # request = GetAllPersonResquest()
-    # request = 'msg.CreatePersonRequest:{"person": {"nameBytes": "bytes:bmFtZQ==", "titleDecimal": "decimal:10", "companyUUID": "uuid:d162d152-b1fe-4cd6-aadb-af861d2087a6", "phone": "phone", "dob": "datetime:2022-04-19T15:57:08.331"} }'
-    # response = crudPerson._dispatchOnMessage(request)
+    pass

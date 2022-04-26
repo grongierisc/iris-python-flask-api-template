@@ -18,10 +18,10 @@ def getInfo():
 
 @app.route("/persons/", methods=["GET"])
 def getAllPersons():
-    msg = msg.GetAllPersonResquest()
+    tMsg = msg.GetAllPersonRequest()
 
     tService = Director.CreateBusinessService("Python.FlaskService")
-    response = tService.dispatchProcessInput(msg)
+    response = tService.dispatchProcessInput(tMsg)
     return jsonify(response)
 
 @app.route("/persons/", methods=["POST"])
@@ -32,23 +32,31 @@ def postPerson():
     tMsg = msg.CreatePersonRequest(person=person)
 
     tService = Director.CreateBusinessService("Python.FlaskService")
-    response = tService.OnProcessInput(tMsg)
+    response = tService.dispatchProcessInput(tMsg)
 
-    return jsonify(payload)
+    return jsonify(response)
 
 # GET person with id
 @app.route("/persons/<int:id>", methods=["GET"])
 def getPerson(id):
-    payload = {}
-    return jsonify(payload)
+    tMsg = msg.GetPersonRequest(id)
+
+    tService = Director.CreateBusinessService("Python.FlaskService")
+    response = tService.dispatchProcessInput(tMsg)
+    return jsonify(response)
 
 # PUT to update person with id
 @app.route("/persons/<int:id>", methods=["PUT"])
 def updatePerson(id):
 
-    payload = {
-    }
-    return jsonify(payload)
+    person = obj.Person(**request.get_json())
+    tMsg = msg.UpdatePersonRequest(person=person)
+    tMsg.id = id
+
+    tService = Director.CreateBusinessService("Python.FlaskService")
+    response = tService.dispatchProcessInput(tMsg)
+
+    return jsonify(response)
 
 # DELETE person with id
 @app.route("/persons/<int:id>", methods=["DELETE"])
