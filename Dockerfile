@@ -5,8 +5,7 @@ FROM $IMAGE
 
 WORKDIR /irisdev/app
 
-COPY src src
-COPY module.xml module.xml
+COPY . .
 COPY iris.script /tmp/iris.script
 
 RUN iris start IRIS \

@@ -1,31 +1,39 @@
 import iris
-import uuid,decimal
-from datetime import datetime
+
 from grongier.pex import BusinessOperation
 
 
-from interop.msg import (CreatePersonResponse,CreatePersonRequest,
+from msg import (CreatePersonResponse,CreatePersonRequest,
                             GetPersonRequest,GetPersonResponse,
-                            GetAllPersonResquest,GetAllPersonResponse,
+                            GetAllPersonRequest,GetAllPersonResponse,
                             UpdatePersonRequest,UpdatePersonResponse
 )
 
-from interop.obj import Person
+from obj import Person
 
+# > The CrudPerson class is a business operation that handles Create, Update, Get and GetAll requests
+# for a Person object
 class CrudPerson(BusinessOperation):
 
     # It's can be dynamic, but here for demo purpose it's hard coded
     DISPATCH  = [
-                    ('interop.msg.CreatePersonRequest','CreatePerson'),
-                    ('interop.msg.GetAllPersonRequest','GetAllPerson'),
-                    ('interop.msg.GetPersonRequest','GetPerson'),
-                    ('interop.msg.UpdatePersonRequest','UpdatePerson'),
+                    ('CreatePersonRequest','create_person'),
+                    ('GetAllPersonRequest','get_all_person'),
+                    ('GetPersonRequest','get_person'),
+                    ('UpdatePersonRequest','update_person'),
                 ]
 
     def OnMessage(self, request):
         return 
 
-    def CreatePerson(self,request:CreatePersonRequest):
+    def create_person(self,request:CreatePersonRequest):
+        """
+        > Create a new person in the database and return the new person's ID
+        
+        :param request: The request object that was passed in from the client
+        :type request: CreatePersonRequest
+        :return: The ID of the newly created person.
+        """
 
         # sqlInsert = 'insert into Sample.Person values (?,?,?,?,?)'
         # iris.sql.exec(sqlInsert,request.person.company,dob,request.person.name,request.person.phone,request.person.title)
@@ -42,7 +50,14 @@ class CrudPerson(BusinessOperation):
         
         return CreatePersonResponse(person._Id())
 
-    def UpdatePerson(self,request:UpdatePersonRequest):
+    def update_person(self,request:UpdatePersonRequest):
+        """
+        > Update a person in the database
+        
+        :param request: The request object that will be passed to the service
+        :type request: UpdatePersonRequest
+        :return: UpdatePersonResponse()
+        """
 
         # IRIS ORM
         if iris.cls('Sample.Person')._ExistsId(request.id):
@@ -56,26 +71,42 @@ class CrudPerson(BusinessOperation):
         
         return UpdatePersonResponse()
 
-    def GetPerson(self,request:GetPersonRequest):
-        sqlSelect = """
+    def get_person(self,request:GetPersonRequest):
+        """
+        > The function takes a `GetPersonRequest` object, executes a SQL query, and returns a
+        `GetPersonResponse` object
+        
+        :param request: The request object that is passed in
+        :type request: GetPersonRequest
+        :return: A GetPersonResponse object
+        """
+        sql_select = """
             SELECT 
                 Company, DOB, Name, Phone, Title
             FROM Sample.Person
             where ID = ?
             """
-        rs = iris.sql.exec(sqlSelect,request.id)
+        rs = iris.sql.exec(sql_select,request.id)
         response = GetPersonResponse()
         for person in rs:
             response.person= Person(person[0],person[1],person[2],person[3],person[4])
         return response
 
-    def GetAllPerson(self,request:GetAllPersonRequest):
-        sqlSelect = """
+    def get_all_person(self,request:GetAllPersonRequest):
+        """
+        > This function returns a list of all the people in the Person table
+        
+        :param request: The request object that is passed to the service
+        :type request: GetAllPersonRequest
+        :return: A list of Person objects
+        """
+
+        sql_select = """
             SELECT 
                 Company, DOB, Name, Phone, Title
             FROM Sample.Person
             """
-        rs = iris.sql.exec(sqlSelect)
+        rs = iris.sql.exec(sql_select)
         response = GetAllPersonResponse()
         response.persons = list()
         for person in rs:

@@ -1,7 +1,8 @@
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request
 from grongier.pex import Director
 
-from interop import obj,msg
+from msg import (GetAllPersonRequest,CreatePersonRequest,UpdatePersonRequest,GetPersonRequest)
+from obj import Person
 
 
 app = Flask(__name__)
@@ -12,55 +13,83 @@ app = Flask(__name__)
 
 # GET Infos
 @app.route("/", methods=["GET"])
-def getInfo():
+def get_info():
+    """
+    It returns a JSON object with a single key-value pair
+    :return: A JSON object with the version number of the API.
+    """
     info = {'version':'1.0.6'}
     return jsonify(info)
 
 @app.route("/persons/", methods=["GET"])
-def getAllPersons():
-    tMsg = msg.GetAllPersonRequest()
+def get_all_persons():
+    """
+    > The function creates a message object, creates a service object, and then dispatches the message
+    to the service
+    :return: A list of all the persons in the database.
+    """
+    msg = GetAllPersonRequest()
 
-    tService = Director.CreateBusinessService("Python.FlaskService")
-    response = tService.dispatchProcessInput(tMsg)
+    service = Director.CreateBusinessService("Python.FlaskService")
+    response = service.dispatchProcessInput(msg)
     return jsonify(response)
 
 @app.route("/persons/", methods=["POST"])
-def postPerson():
-    payload = {} 
+def post_person():
+    """
+    > The function creates a new person object from the request body, creates a message object from the
+    person object, and then dispatches the message to the business service
+    :return: The response is being returned as a json object.
+    """
 
-    person = obj.Person(**request.get_json())
-    tMsg = msg.CreatePersonRequest(person=person)
+    person = Person(**request.gejson())
+    msg = CreatePersonRequest(person=person)
 
-    tService = Director.CreateBusinessService("Python.FlaskService")
-    response = tService.dispatchProcessInput(tMsg)
+    service = Director.CreateBusinessService("Python.FlaskService")
+    response = service.dispatchProcessInput(msg)
 
     return jsonify(response)
 
 # GET person with id
 @app.route("/persons/<int:id>", methods=["GET"])
-def getPerson(id):
-    tMsg = msg.GetPersonRequest(id)
+def get_person(id):
+    """
+    > The function takes an id as a parameter, creates a message, creates a service, and dispatches the
+    message to the service
+    
+    :param id: The id of the person to get
+    :return: A JSON object
+    """
+    msg = GetPersonRequest(id)
 
-    tService = Director.CreateBusinessService("Python.FlaskService")
-    response = tService.dispatchProcessInput(tMsg)
+    service = Director.CreateBusinessService("Python.FlaskService")
+    response = service.dispatchProcessInput(msg)
     return jsonify(response)
 
 # PUT to update person with id
 @app.route("/persons/<int:id>", methods=["PUT"])
-def updatePerson(id):
+def update_person(id:int):
+    """
+    > The function takes the id of the person to update, creates a new person object from the request
+    body, creates a message object, sets the id of the message object, creates a service object, and
+    dispatches the message to the service
+    
+    :param id: The id of the person to update
+    :return: The response is being returned as a json object.
+    """
 
-    person = obj.Person(**request.get_json())
-    tMsg = msg.UpdatePersonRequest(person=person)
-    tMsg.id = id
+    person = Person(**request.gejson())
+    msg = UpdatePersonRequest(person=person)
+    msg.id = id
 
-    tService = Director.CreateBusinessService("Python.FlaskService")
-    response = tService.dispatchProcessInput(tMsg)
+    service = Director.CreateBusinessService("Python.FlaskService")
+    response = service.dispatchProcessInput(msg)
 
     return jsonify(response)
 
 # DELETE person with id
 @app.route("/persons/<int:id>", methods=["DELETE"])
-def deletePerson(id):
+def delete_person(id):
     payload = {}  
     return jsonify(payload)
 
@@ -70,4 +99,4 @@ def deletePerson(id):
 # ----------------------------------------------------------------
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port = "8081")
+    app.run('0.0.0.0', port = "8080")

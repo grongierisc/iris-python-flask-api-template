@@ -1,11 +1,11 @@
-from interop.bo import CrudPerson
-from interop.msg import GetAllPersonResquest
-from interop.obj import Person
+from bo import CrudPerson
+from msg import GetAllPersonRequest
+from obj import Person
 
 if __name__ == '__main__':
     crud = CrudPerson()
     json = {"name":"test"}
     person = Person(**json)
-    msg = GetAllPersonResquest()
+    msg = GetAllPersonRequest()
     response = crud.GetAllPerson(msg)
-    pass
+    
