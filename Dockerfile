@@ -8,6 +8,8 @@ WORKDIR /irisdev/app
 COPY . .
 COPY iris.script /tmp/iris.script
 
+RUN pip3 install -r requirements.txt
+
 RUN iris start IRIS \
 	&& iris session IRIS < /tmp/iris.script \
     && iris stop IRIS quietly
@@ -18,7 +20,5 @@ ENV SRC_PATH=/irisdev/app
 ENV IRISUSERNAME "SuperUser"
 ENV IRISPASSWORD "SYS"
 ENV IRISNAMESPACE "USER"
-
-RUN pip3 install flask gunicorn
 
 ENTRYPOINT [ "/tini", "--", "/irisdev/app/entrypoint.sh" ]
