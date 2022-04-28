@@ -1,6 +1,7 @@
 import iris
 
 from grongier.pex import BusinessOperation
+from grongier.pex import Utils
 
 
 from msg import (CreatePersonResponse,CreatePersonRequest,
@@ -15,15 +16,7 @@ from obj import Person
 # for a Person object
 class CrudPerson(BusinessOperation):
 
-    # It's can be dynamic, but here for demo purpose it's hard coded
-    DISPATCH  = [
-                    ('CreatePersonRequest','create_person'),
-                    ('GetAllPersonRequest','get_all_person'),
-                    ('GetPersonRequest','get_person'),
-                    ('UpdatePersonRequest','update_person'),
-                ]
-
-    def OnMessage(self, request):
+    def on_message(self, request):
         return 
 
     def create_person(self,request:CreatePersonRequest):
@@ -46,7 +39,7 @@ class CrudPerson(BusinessOperation):
         if (v:=request.person.title) is not None: person.Title = v 
         if (v:=request.person.dob) is not None: person.DOB = v 
 
-        person._Save()
+        Utils.raise_on_error(person._Save())
         
         return CreatePersonResponse(person._Id())
 
@@ -67,7 +60,7 @@ class CrudPerson(BusinessOperation):
             if (v:=request.person.phone) is not None: person.Phone = v 
             if (v:=request.person.title) is not None: person.Title = v 
             if (v:=request.person.dob) is not None: person.DOB = v 
-            person._Save()
+            Utils.raise_on_error(person._Save())
         
         return UpdatePersonResponse()
 
@@ -89,7 +82,7 @@ class CrudPerson(BusinessOperation):
         rs = iris.sql.exec(sql_select,request.id)
         response = GetPersonResponse()
         for person in rs:
-            response.person= Person(person[0],person[1],person[2],person[3],person[4])
+            response.person= Person(company=person[0],dob=person[1],name=person[2],phone=person[3],title=person[4])
         return response
 
     def get_all_person(self,request:GetAllPersonRequest):

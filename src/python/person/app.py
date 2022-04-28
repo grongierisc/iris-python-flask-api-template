@@ -1,7 +1,8 @@
 from flask import Flask, jsonify, request
 from grongier.pex import Director
 
-from msg import (GetAllPersonRequest,CreatePersonRequest,UpdatePersonRequest,GetPersonRequest)
+from msg import (GetAllPersonRequest,CreatePersonRequest,
+                UpdatePersonRequest,GetPersonRequest)
 from obj import Person
 
 
@@ -30,7 +31,7 @@ def get_all_persons():
     """
     msg = GetAllPersonRequest()
 
-    service = Director.CreateBusinessService("Python.FlaskService")
+    service = Director.create_business_service("Python.FlaskService")
     response = service.dispatchProcessInput(msg)
     return jsonify(response)
 
@@ -42,10 +43,10 @@ def post_person():
     :return: The response is being returned as a json object.
     """
 
-    person = Person(**request.gejson())
+    person = Person(**request.get_json())
     msg = CreatePersonRequest(person=person)
 
-    service = Director.CreateBusinessService("Python.FlaskService")
+    service = Director.create_business_service("Python.FlaskService")
     response = service.dispatchProcessInput(msg)
 
     return jsonify(response)
@@ -62,7 +63,7 @@ def get_person(id):
     """
     msg = GetPersonRequest(id)
 
-    service = Director.CreateBusinessService("Python.FlaskService")
+    service = Director.create_business_service("Python.FlaskService")
     response = service.dispatchProcessInput(msg)
     return jsonify(response)
 
@@ -78,11 +79,11 @@ def update_person(id:int):
     :return: The response is being returned as a json object.
     """
 
-    person = Person(**request.gejson())
+    person = Person(**request.get_json())
     msg = UpdatePersonRequest(person=person)
     msg.id = id
 
-    service = Director.CreateBusinessService("Python.FlaskService")
+    service = Director.create_business_service("Python.FlaskService")
     response = service.dispatchProcessInput(msg)
 
     return jsonify(response)

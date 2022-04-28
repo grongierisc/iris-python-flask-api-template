@@ -5,15 +5,15 @@ from grongier.pex import BusinessService
 # returns the response
 class FlaskService(BusinessService):
 
-    def OnInit(self):
+    def on_init(self):
         
         if not hasattr(self,'target'):
             self.target = "Python.CrudPerson"
         
         return 
 
-    def OnProcessInput(self,request):
+    def on_process_input(self,request):
 
-        return self.SendRequestSync(self.target,request)
+        return self.send_request_sync(self.target,request)
 
  
