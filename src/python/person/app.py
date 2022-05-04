@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from grongier.pex import Director
+from datetime import datetime
 
 from msg import (GetAllPersonRequest,CreatePersonRequest,
                 UpdatePersonRequest,GetPersonRequest)
@@ -30,10 +31,17 @@ def get_all_persons():
     :return: A list of all the persons in the database.
     """
     msg = GetAllPersonRequest()
-
+    print("debug avant director")
     service = Director.create_business_service("Python.FlaskService")
+    print("debug apres director")
+    print("debug avant response du service")
     response = service.dispatchProcessInput(msg)
-    return jsonify(response)
+    print("debug apres response du service")
+
+    print(response)
+    print(response.persons)
+
+    return jsonify(response.persons)
 
 @app.route("/persons/", methods=["POST"])
 def post_person():
@@ -44,6 +52,7 @@ def post_person():
     """
 
     person = Person(**request.get_json())
+    
     msg = CreatePersonRequest(person=person)
 
     service = Director.create_business_service("Python.FlaskService")

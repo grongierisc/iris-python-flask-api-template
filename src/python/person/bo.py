@@ -103,7 +103,7 @@ class CrudPerson(BusinessOperation):
         response = GetAllPersonResponse()
         response.persons = list()
         for person in rs:
-            response.persons.append(Person(person[0],person[1],person[2],person[3],person[4]))
+            response.persons.append(Person(person[2],person[4],person[0],person[3],str(person[1])))
         return response
 
 

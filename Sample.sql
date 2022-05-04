@@ -11,7 +11,7 @@
 CREATE TABLE Sample.Person (
 
          Company                                  VARCHAR(50),
-         DOB                                      DATE,
+         DOB                                      TIMESTAMP,
          Name                                     VARCHAR(4096),
          Phone                                    VARCHAR(4096),
          Title                                    VARCHAR(50)

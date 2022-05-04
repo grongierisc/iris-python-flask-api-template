@@ -25,8 +25,6 @@ Make sure you have [git](https://git-scm.com/book/en/v2/Getting-Started-Installi
 
 ## 3.1. Installation for development
 
-Create your repository from template.
-
 Clone/git pull the repo into any local directory e.g. like it is shown below:
 ```
 $ git clone https://github.com/grongierisc/iris-python-flask-api-template.git
