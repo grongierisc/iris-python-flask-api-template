@@ -1,9 +1,11 @@
 from flask import Flask, jsonify, request
 from datetime import date
 from grongier.pex import Director
+from datetime import datetime
 
 from msg import (GetAllPersonRequest,CreatePersonRequest,
-                UpdatePersonRequest,GetPersonRequest)
+                UpdatePersonRequest,GetPersonRequest,
+                 DeletePersonRequest)
 from obj import Person
 
 
@@ -31,10 +33,9 @@ def get_all_persons():
     :return: A list of all the persons in the database.
     """
     msg = GetAllPersonRequest()
-
     service = Director.create_business_service("Python.FlaskService")
     response = service.dispatchProcessInput(msg)
-    return jsonify(response)
+    return jsonify(response.persons)
 
 @app.route("/persons/", methods=["POST"])
 def post_person():
@@ -96,8 +97,21 @@ def update_person(id:int):
 # DELETE person with id
 @app.route("/persons/<int:id>", methods=["DELETE"])
 def delete_person(id):
-    payload = {}  
-    return jsonify(payload)
+    """
+    > The function takes an id as an argument, creates a DeletePersonRequest message, sets the id
+    property of the message to the id argument, creates a business service, dispatches the message to
+    the service, and returns the response
+    
+    :param id: The id of the person to delete
+    :return: A JSON object with the response from the service.
+    """
+    msg = DeletePersonRequest()
+    msg.id = id
+
+    service = Director.create_business_service("Python.FlaskService")
+    response = service.dispatchProcessInput(msg)
+
+    return jsonify(response)
 
 
 # ----------------------------------------------------------------

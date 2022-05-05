@@ -8,7 +8,8 @@ from grongier.pex import Utils
 from msg import (CreatePersonResponse,CreatePersonRequest,
                             GetPersonRequest,GetPersonResponse,
                             GetAllPersonRequest,GetAllPersonResponse,
-                            UpdatePersonRequest,UpdatePersonResponse
+                            UpdatePersonRequest,UpdatePersonResponse,
+                            DeletePersonRequest,DeletePersonResponse
 )
 
 from obj import Person
