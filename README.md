@@ -155,6 +155,7 @@ To get all the data in JSON call:
 localhost:5000/persons/all
 ```
 
+<br><br>
 
 To request the data for a particular record provide the id in GET request like 'localhost:5000/persons/id', here is an example:
 ```
