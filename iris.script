@@ -13,7 +13,7 @@
  zn "USER"
 
  do ##class(%Library.EnsembleMgr).EnableNamespace("USER",1)
- do $SYSTEM.SQL.Schema.ImportDDL("/irisdev/app/Sample.sql","/irisdev/app/sql.log","IRIS")
+ do $SYSTEM.SQL.Schema.ImportDDL("/irisdev/app/Sample.sql","/tmp/sql.log","IRIS")
 
  zpm "install pex-embbeded-python" 
  

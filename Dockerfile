@@ -5,14 +5,14 @@ FROM $IMAGE
 
 WORKDIR /irisdev/app
 
-COPY . .
-COPY iris.script /tmp/iris.script
+COPY requirements.txt .
 
 RUN pip3 install -r requirements.txt
 
-RUN iris start IRIS \
-	&& iris session IRIS < /tmp/iris.script \
-    && iris stop IRIS quietly
+RUN --mount=type=bind,src=.,dst=. \
+    iris start IRIS && \
+	iris session IRIS < iris.script && \
+    iris stop IRIS quietly
 
 # create Python env
 ENV PYTHON_PATH=/usr/irissys/bin/irispython
