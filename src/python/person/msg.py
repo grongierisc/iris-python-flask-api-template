@@ -51,3 +51,13 @@ class UpdatePersonRequest(Message):
 # > UpdatePersonResponse is a Message.
 class UpdatePersonResponse(Message):
     pass
+
+@dataclass
+# > DeletePersonRequest is a message that contains an id field
+class DeletePersonRequest(Message):
+    id:int = None
+
+@dataclass
+# DeletePersonResponse is a Message.
+class DeletePersonResponse(Message):
+    pass

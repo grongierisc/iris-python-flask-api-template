@@ -21,6 +21,7 @@
  zw ##class(Grongier.PEX.Utils).RegisterComponent("bo","CrudPerson","/irisdev/app/src/python/person/",1,"Python.CrudPerson")
 
  do $System.OBJ.LoadDir("/irisdev/app/src/ObjectScript","cubk","*.cls",1)
+ do $System.OBJ.LoadDir("/irisdev/app/src/Sample","cubk","*.cls",1)
 
  set ^EnsPortal.Settings("SuperUser","LastProduction")	= "Python.Production"
 

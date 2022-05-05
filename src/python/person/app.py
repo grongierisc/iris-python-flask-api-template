@@ -31,16 +31,8 @@ def get_all_persons():
     :return: A list of all the persons in the database.
     """
     msg = GetAllPersonRequest()
-    print("debug avant director")
     service = Director.create_business_service("Python.FlaskService")
-    print("debug apres director")
-    print("debug avant response du service")
     response = service.dispatchProcessInput(msg)
-    print("debug apres response du service")
-
-    print(response)
-    print(response.persons)
-
     return jsonify(response.persons)
 
 @app.route("/persons/", methods=["POST"])
@@ -100,8 +92,21 @@ def update_person(id:int):
 # DELETE person with id
 @app.route("/persons/<int:id>", methods=["DELETE"])
 def delete_person(id):
-    payload = {}  
-    return jsonify(payload)
+    """
+    > The function takes an id as an argument, creates a DeletePersonRequest message, sets the id
+    property of the message to the id argument, creates a business service, dispatches the message to
+    the service, and returns the response
+    
+    :param id: The id of the person to delete
+    :return: A JSON object with the response from the service.
+    """
+    msg = DeletePersonRequest(person=person)
+    msg.id = id
+
+    service = Director.create_business_service("Python.FlaskService")
+    response = service.dispatchProcessInput(msg)
+
+    return jsonify(response)
 
 
 # ----------------------------------------------------------------

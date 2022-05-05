@@ -7,7 +7,8 @@ from grongier.pex import Utils
 from msg import (CreatePersonResponse,CreatePersonRequest,
                             GetPersonRequest,GetPersonResponse,
                             GetAllPersonRequest,GetAllPersonResponse,
-                            UpdatePersonRequest,UpdatePersonResponse
+                            UpdatePersonRequest,UpdatePersonResponse,
+                            DeletePersonRequest,DeletePersonResponse
 )
 
 from obj import Person
@@ -103,8 +104,26 @@ class CrudPerson(BusinessOperation):
         response = GetAllPersonResponse()
         response.persons = list()
         for person in rs:
-            response.persons.append(Person(person[2],person[4],person[0],person[3],str(person[1])))
+            response.persons.append(Person(company=person[0],dob=person[1],name=person[2],phone=person[3],title=person[4]))
         return response
+    
+    def delete_person(self,request:DeletePersonRequest):
+        """
+        > Delete a person from the database
+        
+        :param request: The request object that is passed to the service
+        :type request: DeletePersonRequest
+        :return: The response is being returned.
+        """
+
+        sql_select = """
+            DELETE FROM Sample.Person as Pers
+            WHERE Pers.id = ?
+            """
+        rs = iris.sql.exec(sql_select,request.id)
+        response = DeletePersonResponse()
+        return response
+
 
 
 if __name__ == '__main__':
