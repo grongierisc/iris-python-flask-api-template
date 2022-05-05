@@ -46,7 +46,7 @@ def post_person():
     """
     body = request.get_json()
     person = Person(**body)
-    if hasattr(body,'dob'):
+    if 'dob' in body:
         person.dob = date.fromisoformat(body['dob'])
     msg = CreatePersonRequest(person=person)
 
@@ -84,7 +84,7 @@ def update_person(id:int):
     """
     body = request.get_json()
     person = Person(**body)
-    if hasattr(body,'dob'):
+    if 'dob' in body:
         person.dob = date.fromisoformat(body['dob'])
     msg = UpdatePersonRequest(person=person)
     msg.id = id
