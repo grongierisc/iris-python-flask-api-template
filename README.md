@@ -23,7 +23,7 @@ It also has OPEN API spec, can be developed with Docker and VSCode.
     - [5.4.1. Testing DELETE request](#541-testing-delete-request)
     - [5.4.2. How DELETE request works](#542-how-delete-request-works)
 - [6. How to start coding](#6-how-to-start-coding)
-- [7. What's insde the repo](#7-whats-insde-the-repo)
+- [7. What's inside the repo](#7-whats-inside-the-repo)
   - [7.1. Dockerfile](#71-dockerfile)
   - [7.2. .vscode/settings.json](#72-vscodesettingsjson)
   - [7.3. .vscode/launch.json](#73-vscodelaunchjson)
@@ -101,14 +101,14 @@ This will run the app.
 
 ### 5.1.1. Testing POST request
 
-Create a POST request,for example in Postman or in RESTer for mozilla, with raw data in JSON like:
+Create a POST request, for example in Postman or in RESTer for mozilla, with raw data in JSON like:
 ```json
 {"name":"Elon Musk","title":"CEO","company":"Tesla","phone":"123-123-1233","dob":"1982-01-19"}
 ```
 Using `Content-Type` as `application/json`
 
 Adjust the authorisation if needed - it is basic for container with default login and password for IRIS Community edition container.<br>
-Send the POST request to `localhost:5000/persons/`
+Send the POST request to `localhost:5000/persons/`<br>
 This will create a record in the table Sample.Person of IRIS and return the `id` of the newly added `Person`
 
 ![Here is an example](https://user-images.githubusercontent.com/77791586/166916610-de0791ab-18d4-4dd4-a416-fffb9b6254cb.mov) of the POST request to add `Elon Musk` to the table.
@@ -291,7 +291,7 @@ This repository is ready to code in VSCode with InterSystems plugins.
 Open `/src/python/person/app.py` to change anything on the api.
 Open `/src/python/person/bo.py` to be able to change things related to the internal requests, this is where you can use SQL - it will be compiled in running IRIS docker container.
 
-# 7. What's insde the repo
+# 7. What's inside the repo
 
 ## 7.1. Dockerfile
 
