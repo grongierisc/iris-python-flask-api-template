@@ -24,7 +24,7 @@ $ git clone git@github.com:intersystems-community/objectscript-rest-docker-templ
 Open the terminal in this directory and run:
 
 ```
-$ docker-compose up -d --build
+$ DOCKER_BUILDKIT=1 docker-compose up -d --build
 ```
 
 or open the folder in VSCode and do the following:
