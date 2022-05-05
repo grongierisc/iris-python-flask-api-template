@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date
 
 @dataclass
 class Person:
@@ -7,4 +7,4 @@ class Person:
     title:str = None
     company:str = None
     phone:str = None
-    dob:datetime = None
+    dob:date = None

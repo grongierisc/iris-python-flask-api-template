@@ -1,4 +1,5 @@
 import iris
+from datetime import date
 
 from grongier.pex import BusinessOperation
 from grongier.pex import Utils
@@ -37,7 +38,7 @@ class CrudPerson(BusinessOperation):
         if (v:=request.person.name) is not None: person.Name = v 
         if (v:=request.person.phone) is not None: person.Phone = v 
         if (v:=request.person.title) is not None: person.Title = v 
-        if (v:=request.person.dob) is not None: person.DOB = v 
+        if (v:=request.person.dob) is not None: person.DOB = iris.system.SQL.DATE(v.isoformat())
 
         Utils.raise_on_error(person._Save())
         
@@ -59,7 +60,7 @@ class CrudPerson(BusinessOperation):
             if (v:=request.person.name) is not None: person.Name = v 
             if (v:=request.person.phone) is not None: person.Phone = v 
             if (v:=request.person.title) is not None: person.Title = v 
-            if (v:=request.person.dob) is not None: person.DOB = v 
+            if (v:=request.person.dob) is not None: person.DOB = iris.system.SQL.DATE(v.isoformat())
             Utils.raise_on_error(person._Save())
         
         return UpdatePersonResponse()
@@ -82,7 +83,11 @@ class CrudPerson(BusinessOperation):
         rs = iris.sql.exec(sql_select,request.id)
         response = GetPersonResponse()
         for person in rs:
-            response.person= Person(company=person[0],dob=person[1],name=person[2],phone=person[3],title=person[4])
+            try:
+                dob = date.fromisoformat(iris.system.SQL.TOCHAR(person[1],"YYYY-MM-DD"))
+            except:
+                dob = ''
+            response.person= Person(company=person[0],dob=dob,name=person[2],phone=person[3],title=person[4])
         return response
 
     def get_all_person(self,request:GetAllPersonRequest):
@@ -103,9 +108,9 @@ class CrudPerson(BusinessOperation):
         response = GetAllPersonResponse()
         response.persons = list()
         for person in rs:
-            response.persons.append(Person(person[0],person[1],person[2],person[3],person[4]))
+            try:
+                dob = date.fromisoformat(iris.system.SQL.TOCHAR(person[1],"YYYY-MM-DD"))
+            except:
+                dob = ''
+            response.persons.append(Person(company=person[0],dob=dob,name=person[2],phone=person[3],title=person[4]))
         return response
-
-
-if __name__ == '__main__':
-    pass

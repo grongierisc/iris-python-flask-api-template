@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from datetime import date
 from grongier.pex import Director
 
 from msg import (GetAllPersonRequest,CreatePersonRequest,
@@ -42,8 +43,10 @@ def post_person():
     person object, and then dispatches the message to the business service
     :return: The response is being returned as a json object.
     """
-
-    person = Person(**request.get_json())
+    body = request.get_json()
+    person = Person(**body)
+    if hasattr(body,'dob'):
+        person.dob = date.fromisoformat(body['dob'])
     msg = CreatePersonRequest(person=person)
 
     service = Director.create_business_service("Python.FlaskService")
@@ -78,8 +81,10 @@ def update_person(id:int):
     :param id: The id of the person to update
     :return: The response is being returned as a json object.
     """
-
-    person = Person(**request.get_json())
+    body = request.get_json()
+    person = Person(**body)
+    if hasattr(body,'dob'):
+        person.dob = date.fromisoformat(body['dob'])
     msg = UpdatePersonRequest(person=person)
     msg.id = id
 
