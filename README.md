@@ -37,7 +37,7 @@ It is to be noted that the table Sample.Person was already created in advance fo
 CREATE TABLE Sample.Person (
 
          Company                                  VARCHAR(50),
-         DOB                                      TIMESTAMP,
+         DOB                                      DATE,
          Name                                     VARCHAR(4096),
          Phone                                    VARCHAR(4096),
          Title                                    VARCHAR(50)
