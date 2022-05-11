@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from datetime import date
 from grongier.pex import Director
-from datetime import datetime
+from datetime import date
 
 from msg import (GetAllPersonRequest,CreatePersonRequest,
                 UpdatePersonRequest,GetPersonRequest,
@@ -33,8 +33,10 @@ def get_all_persons():
     :return: A list of all the persons in the database.
     """
     msg = GetAllPersonRequest()
-    service = Director.create_business_service("Python.FlaskService")
-    response = service.dispatchProcessInput(msg)
+
+    service = Director.create_python_business_service("Python.FlaskService")
+    response = service.on_process_input(msg)
+
     return jsonify(response.persons)
 
 @app.route("/persons/", methods=["POST"])
@@ -50,8 +52,8 @@ def post_person():
         person.dob = date.fromisoformat(body['dob'])
     msg = CreatePersonRequest(person=person)
 
-    service = Director.create_business_service("Python.FlaskService")
-    response = service.dispatchProcessInput(msg)
+    service = Director.create_python_business_service("Python.FlaskService")
+    response = service.on_process_input(msg)
 
     return jsonify(response)
 
@@ -67,8 +69,9 @@ def get_person(id):
     """
     msg = GetPersonRequest(id)
 
-    service = Director.create_business_service("Python.FlaskService")
-    response = service.dispatchProcessInput(msg)
+    service = Director.create_python_business_service("Python.FlaskService")
+    response = service.on_process_input(msg)
+
     return jsonify(response)
 
 # PUT to update person with id
@@ -89,8 +92,8 @@ def update_person(id:int):
     msg = UpdatePersonRequest(person=person)
     msg.id = id
 
-    service = Director.create_business_service("Python.FlaskService")
-    response = service.dispatchProcessInput(msg)
+    service = Director.create_python_business_service("Python.FlaskService")
+    response = service.on_process_input(msg)
 
     return jsonify(response)
 
@@ -108,8 +111,8 @@ def delete_person(id):
     msg = DeletePersonRequest()
     msg.id = id
 
-    service = Director.create_business_service("Python.FlaskService")
-    response = service.dispatchProcessInput(msg)
+    service = Director.create_python_business_service("Python.FlaskService")
+    response = service.on_process_input(msg)
 
     return jsonify(response)
 
