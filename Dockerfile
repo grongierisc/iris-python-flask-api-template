@@ -1,4 +1,3 @@
-ARG IMAGE=containers.intersystems.com/intersystems/iris:2021.2.0.651.0
 ARG IMAGE=intersystemsdc/iris-community
 
 FROM $IMAGE
