@@ -8,6 +8,6 @@ set -m
 
 cd ${SRC_PATH}/src/python/person
 
-${PYTHON_PATH} -m gunicorn --bind "0.0.0.0:8080" wsgi:app &
+${PYTHON_PATH} -m gunicorn --bind "0.0.0.0:5000" wsgi:app &
 
 fg %1
