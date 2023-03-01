@@ -21,6 +21,20 @@ class CrudPerson(BusinessOperation):
     def on_message(self, request):
         return 
 
+    def delete_person(self,request:DeletePersonRequest):
+        """
+        > Delete a person from the database
+        
+        :param request: The request object that is passed to the service
+        :type request: DeletePersonRequest
+        :return: DeletePersonResponse()
+        """
+        # IRIS ORM
+        if iris.cls('Sample.Person')._ExistsId(request.id):
+            Utils.raise_on_error(iris.cls('Sample.Person')._DeleteId(request.id))
+        
+        return DeletePersonResponse()
+
     def create_person(self,request:CreatePersonRequest):
         """
         > Create a new person in the database and return the new person's ID
