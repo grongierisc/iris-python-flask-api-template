@@ -22,7 +22,7 @@
       },
       "args": [
         "run",
-        "--no-debugger"
+        "--port", "8081"
       ],
       "jinja": true,
       "justMyCode": true

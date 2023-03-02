@@ -4,3 +4,4 @@ waitISC.log
 iris-main.log
 sql.log
 src/python/person/main.py
+.venv
